@@ -53,7 +53,7 @@ namespace TheAnimalShelter
 
             ////Console.WriteLine(kitty.FirstOrDefault().Name); 
             #endregion
-            var shelter = new Shelter(20);
+            var shelter = new Shelter(5);
             shelter.Animals.Insert(0, new Animal("Alfa", "Cat", "White"));
             shelter.Animals.Add(new Animal("Mruczek", "Cat", "Black"));
 
@@ -61,32 +61,116 @@ namespace TheAnimalShelter
             shelter.Animals.Add(new Animal("Suczka", "Dogo", "Red"));
             shelter.Animals.Add(new Animal("Kajtek", "Dog", "BlackWhite"));
 
-            var allAnimals = shelter.Animals.Where(p => p.Type == "Cat");
+            //var allAnimals = shelter.Animals.Where(p => p.Type == "Cat");
+            // string answer = Console.ReadLine();
 
-            //foreach (var item in allAnimals)
-            //{
-            //    Console.WriteLine($"Name: {item.Name}, Type: {item.Type}, Colour: {item.Colour}");
-            //}
-            Console.WriteLine("Welcome in AnimalShelter Management System!");
-            Console.WriteLine("Type ADD to add a new animal, type DELETE to delete animal from database, type STATUS to check current status of the shelter.");
-            var answer = Console.ReadLine();
-
-
-
-            Console.WriteLine($"Animals in Shelter: {shelter.Animals.Count}/{shelter.Capacity}.");
-            Console.WriteLine();
-            Console.WriteLine($"Empty cages: {shelter.Capacity - shelter.Animals.Count}.");
-            Console.WriteLine();
-            Console.WriteLine("These animals are currently in Shelter: ");
-
-            foreach (var item in shelter.Animals)
+            do
             {
-                Console.WriteLine($"Name: {item.Name}, Type: {item.Type}, Colour: {item.Colour}");
-            }
+                // welcome text
+                Console.WriteLine("Welcome in AnimalShelter Management System!");
+                Console.WriteLine("Type ADD to add a new animal, type DELETE to delete animal from database, type STATUS to check current status of the shelter.");
+                var answer = Console.ReadLine();
+                var freeSlots = shelter.Capacity - shelter.Animals.Count;
 
+                //switch
+                switch (answer)
+                {
+                    // adding new animal
+                    case "ADD":
+                    case "add":
+                        {
+                            if (freeSlots > 0)
+                            {
+                                Console.WriteLine("Enter the NAME of a new animal: ");
+                                string newAnimalName = Console.ReadLine();
+                                Console.WriteLine();
+                                Console.WriteLine("Enter the TYPE of a new animal: ");
+
+                                string newAnimalType = Console.ReadLine();
+
+                                Console.WriteLine();
+                                Console.WriteLine("Enter the COLOUR of a new animal: ");
+                                string newAnimalColour = Console.ReadLine();
+
+                                shelter.Animals.Add(new Animal(newAnimalName, newAnimalType, newAnimalColour));
+                                Console.WriteLine("Added a new animal!");
+                            }
+                            else
+                            {
+                                Console.WriteLine("The shelter is full!");
+                                break;
+                            }
+
+                            break;
+                        }
+
+                    // deleting animal from list
+                    case "DELETE":
+                    case "delete":
+
+                        {
+                            //loop showing current list
+                            foreach (var item in shelter.Animals)
+                            {
+                                Console.WriteLine($"  [{shelter.Animals.IndexOf(item)}]  - Name: {item.Name}, Type: {item.Type}, Colour: {item.Colour}");
+                            }
+                            Console.WriteLine("Which animal would you like to remove? Type the number");
+                            string animalDelete = Console.ReadLine();
+                            shelter.Animals.RemoveAt(Convert.ToInt32(animalDelete));
+                            Console.WriteLine();
+
+                            //loop showing current list
+                            foreach (var item in shelter.Animals)
+                            {
+                                Console.WriteLine($"  [{shelter.Animals.IndexOf(item)}]  - Name: {item.Name}, Type: {item.Type}, Colour: {item.Colour}");
+                            }
+
+                            break;
+                        }
+
+
+                    // checking shelter status
+                    case "STATUS":
+                    case "status":
+
+                        {
+                            Console.WriteLine($"Animals in Shelter: {shelter.Animals.Count}/{shelter.Capacity}.");
+                            Console.WriteLine();
+                            Console.WriteLine($"Empty cages: {shelter.Capacity - shelter.Animals.Count}.");
+                            Console.WriteLine();
+                            Console.WriteLine("These animals are currently in Shelter: ");
+
+                            //loop showing current list
+                            foreach (var item in shelter.Animals)
+                            {
+                                Console.WriteLine($"  [{shelter.Animals.IndexOf(item)}]  - Name: {item.Name}, Type: {item.Type}, Colour: {item.Colour}");
+                            }
+                            break;
+                        }
+                    case "END":
+                    case "end":
+                        {
+                            // closing console window
+                            Environment.Exit(0);
+                            break;
+                        }
+                    default:
+                        Console.WriteLine("ERROR! Wrong command!");
+                        break;
+                }
+
+            }
+            while (true);
 
 
 
         }
+
+
+
+
+
+
     }
 }
+
